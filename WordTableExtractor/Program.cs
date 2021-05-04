@@ -11,7 +11,7 @@ namespace WordTableExtractor
     class Program
     {
         static readonly string ProductVersion = typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-
+        
         static void Main(string[] args)
         {
             var headingInfo = new HeadingInfo("Word Table Extractor", ProductVersion);
@@ -20,29 +20,41 @@ namespace WordTableExtractor
             Console.WriteLine(CopyrightInfo.Default);
             Console.WriteLine();
 
-            var helpWriter = new StringWriter();
 
-            var parser = new CommandLine.Parser(with => with.HelpWriter = helpWriter);
+            var parser = new CommandLine.Parser(with => with.HelpWriter = null);
 
-            parser.ParseArguments<Options>(args)
+            var parserResult = parser.ParseArguments<Options>(args);
+
+            parserResult
                 .WithParsed(TestHandler)
-                .WithNotParsed(errs => DisplayHelp(errs, helpWriter));
-
-            Console.WriteLine($"Exit code= {Environment.ExitCode}");
+                .WithNotParsed(errs => DisplayHelp(errs, parserResult));
         }
 
-        static void DisplayHelp(IEnumerable<Error> errs, TextWriter helpWriter)
+        static void DisplayHelp<T>(IEnumerable<Error> errs, ParserResult<T> result)
         {
-            if (errs.IsVersion() || errs.IsHelp())
-                Console.WriteLine(helpWriter.ToString());
-            else
-                Console.Error.WriteLine(helpWriter.ToString());
+            var helpText = HelpText.AutoBuild(result, h =>
+            {
+                h.AdditionalNewLineAfterOption = false;
+                h.Heading = string.Empty;
+                h.Copyright = string.Empty;
+
+                return HelpText.DefaultParsingErrorsHandler(result, h);
+            }, e => e);
+            Console.WriteLine(helpText);
         }
 
         private static void HandleExtraction(Options options)
         {
             var extractor = new TableExtractor(options);
-            extractor.ExtractTables();
+            
+            var summary = extractor.ExtractTables();
+
+            DisplaySummary(summary);
+        }
+
+        private static void DisplaySummary(Summary summary)
+        {
+            Console.WriteLine("This ist the summary.");
         }
 
         private static void TestHandler(Options options)

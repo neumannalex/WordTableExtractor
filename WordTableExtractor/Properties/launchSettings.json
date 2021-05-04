@@ -1,8 +1,7 @@
 {
   "profiles": {
     "WordTableExtractor": {
-      "commandName": "Project",
-      "commandLineArgs": "-f Myfile.docx -i -z"
+      "commandName": "Project"
     }
   }
 }
