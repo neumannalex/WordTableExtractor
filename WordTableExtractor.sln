@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordTableExtractor", "WordTableExtractor\WordTableExtractor.csproj", "{72BDF633-EC2D-477E-9F57-F0EA3F8806EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{036716AC-5A0C-4409-92BA-631E5857A641}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72BDF633-EC2D-477E-9F57-F0EA3F8806EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72BDF633-EC2D-477E-9F57-F0EA3F8806EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72BDF633-EC2D-477E-9F57-F0EA3F8806EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72BDF633-EC2D-477E-9F57-F0EA3F8806EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{036716AC-5A0C-4409-92BA-631E5857A641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{036716AC-5A0C-4409-92BA-631E5857A641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{036716AC-5A0C-4409-92BA-631E5857A641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{036716AC-5A0C-4409-92BA-631E5857A641}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17443428-8095-41EB-8F0D-9D42D4521EF1}
+	EndGlobalSection
+EndGlobal
