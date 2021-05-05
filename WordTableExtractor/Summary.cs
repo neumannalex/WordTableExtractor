@@ -21,7 +21,11 @@ namespace WordTableExtractor
         public string OutputFilePath { get; set; }
         
         public bool ShouldExportImages { get; set; }
+        public bool CouldExportImages { get; set; }
+
         public bool ShouldZipExportedImages { get; set; }
+        public bool CouldZipExportedImages { get; set; }
+
         public string ImageLocation { get; set; }
 
         public List<string> Errors { get; set; } = new List<string>();

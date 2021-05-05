@@ -10,7 +10,7 @@ namespace Test
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -25,7 +25,7 @@ namespace Test
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -41,7 +41,7 @@ namespace Test
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
@@ -59,7 +59,7 @@ namespace Test
         [Fact]
         public void OutputFilePath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -74,7 +74,7 @@ namespace Test
         [Fact]
         public void OutputFilePath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -90,7 +90,7 @@ namespace Test
         [Fact]
         public void OutputFilePath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
@@ -108,7 +108,7 @@ namespace Test
         [Fact]
         public void ImageFolderPath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -123,7 +123,7 @@ namespace Test
         [Fact]
         public void ImageFolderPath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -139,7 +139,7 @@ namespace Test
         [Fact]
         public void ImageFolderPath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
@@ -157,7 +157,7 @@ namespace Test
         [Fact]
         public void ImageZipPath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -172,7 +172,7 @@ namespace Test
         [Fact]
         public void ImageZipPath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -188,7 +188,7 @@ namespace Test
         [Fact]
         public void ImageZipPath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new Options
+            var options = new ExportOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
