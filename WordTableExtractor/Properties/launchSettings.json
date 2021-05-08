@@ -2,7 +2,7 @@
   "profiles": {
     "WordTableExtractor": {
       "commandName": "Project",
-      "commandLineArgs": "export -f C:\\Daten\\Temp\\LH_Word2Excel\\20210503_HWComponentSpecification_V1.1.docx -z"
+      "commandLineArgs": "export -f C:\\Daten\\Temp\\LH_Word2Excel\\20210503_HWComponentSpecification.docx -z -i"
     }
   }
 }

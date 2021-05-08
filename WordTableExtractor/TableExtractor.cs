@@ -150,11 +150,12 @@ namespace WordTableExtractor
 
                 dataTable.TableName = table.LocalName ?? $"Table {newIndex}";
 
+
                 _dataTables.Add(dataTable);
 
                 _summary.NumberOfTablesImported++;
             }
-        }
+        }        
 
         private void ExportTablesToExcel()
         {
@@ -210,7 +211,7 @@ namespace WordTableExtractor
                 {
                     foreach (TableCell cell in row.Descendants<TableCell>())
                     {
-                        dataTable.Columns.Add(cell.InnerText);
+                        dataTable.Columns.Add(cell.InnerText.Trim());
                     }
                     rowCount += 1;
                 }
@@ -233,7 +234,7 @@ namespace WordTableExtractor
 
         private string GetCellContents(TableCell cell)
         {
-            var content = cell.InnerText;
+            var content = cell.InnerText.Trim();
 
             if(_options.ExportImages)
             {
@@ -241,7 +242,7 @@ namespace WordTableExtractor
 
                 var sb = new StringBuilder();
                 
-                sb.AppendLine(cell.InnerText);
+                sb.Append(content);
 
                 foreach (var imageName in imageNames)
                     sb.AppendLine($"<{imageName}>");

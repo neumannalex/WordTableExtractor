@@ -21,14 +21,21 @@ namespace WordTableExtractor
             Console.WriteLine(CopyrightInfo.Default);
             Console.WriteLine();
 
-
             var parser = new CommandLine.Parser(with => with.HelpWriter = null);
 
-            var parserResult = parser.ParseArguments<ExportOptions>(args);
+            try
+            {
+                var parserResult = parser.ParseArguments<ExportOptions, TransformOptions>(args);
 
-            parserResult
-                .WithParsed<ExportOptions>(HandleExtraction)
-                .WithNotParsed(errs => DisplayHelp(errs, parserResult));
+                parserResult
+                    .WithParsed<ExportOptions>(HandleExtraction)
+                    .WithParsed<TransformOptions>(HandleTransform)
+                    .WithNotParsed(errs => DisplayHelp(errs, parserResult));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         static void DisplayHelp<T>(IEnumerable<Error> errs, ParserResult<T> result)
@@ -51,6 +58,13 @@ namespace WordTableExtractor
             var summary = extractor.ExtractTables();
 
             DisplaySummary(summary);
+        }
+
+        private static void HandleTransform(TransformOptions options)
+        {
+            var transformer = new TableTransformer(options);
+
+            transformer.Transform();
         }
 
         private static void DisplaySummary(Summary summary)

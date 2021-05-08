@@ -7,12 +7,10 @@ using System.Text;
 namespace WordTableExtractor
 {
     [Verb("export", HelpText = "Export tables from Word to Excel.")]
-    public class ExportOptions
+    public class ExportOptions : IOptions
     {
-        [Option('f', "filename", Required = true, HelpText = "Input filename of Word document.")]
         public string Filename { get; set; }
 
-        [Option('o', "output", Required = false, HelpText = "Output filename of Excel document.")]
         public string Output { get; set; }
 
         [Option('i', "images", Required = false, Default = true, HelpText = "Set to 'true' to export images from tables.")]
