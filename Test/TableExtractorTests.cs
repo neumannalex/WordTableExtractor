@@ -7,6 +7,22 @@ namespace Test
 {
     public class TableExtractorTests
     {
+        private ExportOptions _options = new ExportOptions
+        {
+            Filename = @"D:\Temp\lh\Example.docx",
+            ExportImages = true,
+            ZipImages = true,
+            Verbose = false
+        };
+
+        [Fact]
+        public void RunExtraction()
+        {
+            var extractor = new TableExtractor(_options);
+
+            var summary = extractor.ExtractTables();
+        }
+
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Default()
         {

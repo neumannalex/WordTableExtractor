@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using WordTableExtractor;
@@ -11,15 +12,15 @@ namespace Test
     {
         private TransformOptions _options = new TransformOptions
         {
-            Filename = @"C:\Daten\Temp\LH_Word2Excel\20210503_HWComponentSpecification\20210503_HWComponentSpecification.xlsx",
+            Filename = @"D:\Temp\lh\Example\Example.xlsx",
             Sheet = "tbl",
-            Range = "A1:G644",
-            Output = @"C:\Daten\Temp\LH_Word2Excel\20210503_HWComponentSpecification\20210503_HWComponentSpecification_transformed.xlsx",
+            Range = "A1:G622",
+            Output = @"D:\Temp\lh\Example\Example_transformed.xlsx",
             Consistency = true
         };
 
         [Fact]
-        public void ImportData()
+        public void RunTransformation()
         {
             var transformer = new TableTransformer(_options);
 
@@ -35,6 +36,35 @@ namespace Test
             var result = Regex.Match(input, pattern);
 
             var replaced = Regex.Replace(input, pattern, "-$1");
+        }
+
+        [Fact]
+        public void TestHierarchy()
+        {
+            var h = new Hierarchy();
+
+            h.HasLevel(1).Should().BeTrue();
+            h.HasLevel(2).Should().BeFalse();
+
+            h.ToString().Should().Be("1");
+
+            h.NewLevel();
+            h.HasLevel(2).Should().BeTrue();
+            h.ToString().Should().Be("1.1");
+
+            h.IncrementLevel(2);
+            h.ToString().Should().Be("1.2");
+        }
+
+        [Fact]
+        public void TestTree()
+        {
+            var req0 = new RequirementNode("1.15", "Root", "");
+
+            var rootNode = new TreeNode<RequirementNode>(req0);
+
+            
+
         }
     }
 }

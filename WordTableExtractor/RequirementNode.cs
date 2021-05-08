@@ -10,22 +10,34 @@ namespace WordTableExtractor
         public string Section { get; private set; }
         public ArtifactType Type { get; private set; }
         public string Content { get; private set; }
-
+        public string SourceRange { get; private set; }
         public RequirementNodeAddress Address { get; private set; }
 
-        public RequirementNode(string section, string type, string content)
+        public Dictionary<string, object> Values { get; set; } = new Dictionary<string, object>();
+
+        public RequirementNode(string section, string type, string content, string sourceRange = "")
         {
             Section = section;
             Content = content;
+            SourceRange = sourceRange;
 
-            if(Enum.TryParse<ArtifactType>(type, out ArtifactType parsedType))
+            if(!string.IsNullOrEmpty(type))
             {
-                Type = parsedType;
+                if (Enum.TryParse<ArtifactType>(type, out ArtifactType parsedType))
+                {
+                    Type = parsedType;
+                }
+                else
+                {
+                    if (type.ToLower().Contains("info"))
+                        Type = ArtifactType.Information;
+                    else
+                        Type = ArtifactType.Unknown;
+                }
             }
             else
             {
-                if (type.ToLower().Contains("info"))
-                    Type = ArtifactType.Information;
+                Type = ArtifactType.Unknown;
             }
 
             Address = new RequirementNodeAddress(section);
@@ -285,6 +297,7 @@ namespace WordTableExtractor
     {
         Heading,
         Information,
-        Requirement
+        Requirement,
+        Unknown
     }
 }
