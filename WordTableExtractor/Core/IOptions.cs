@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace WordTableExtractor
+namespace WordTableExtractor.Core
 {
     public interface IOptions
     {

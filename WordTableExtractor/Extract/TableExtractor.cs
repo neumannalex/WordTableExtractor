@@ -10,12 +10,13 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WordTableExtractor.Extensions;
 
-namespace WordTableExtractor
+namespace WordTableExtractor.Extract
 {
     public class TableExtractor
     {
-        private readonly ExportOptions _options;
+        private readonly ExtractOptions _options;
         private List<DataTable> _dataTables;
         private WordprocessingDocument _document;
         private Summary _summary;
@@ -55,7 +56,7 @@ namespace WordTableExtractor
         }
 
 
-        public TableExtractor(ExportOptions options)
+        public TableExtractor(ExtractOptions options)
         {
             _options = options;
             _summary = new Summary();

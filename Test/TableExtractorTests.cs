@@ -1,13 +1,14 @@
 using FluentAssertions;
 using System;
 using WordTableExtractor;
+using WordTableExtractor.Extract;
 using Xunit;
 
 namespace Test
 {
     public class TableExtractorTests
     {
-        private ExportOptions _options = new ExportOptions
+        private ExtractOptions _options = new ExtractOptions
         {
             Filename = @"D:\Temp\lh\Example.docx",
             ExportImages = true,
@@ -26,7 +27,7 @@ namespace Test
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -41,7 +42,7 @@ namespace Test
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -57,7 +58,7 @@ namespace Test
         [Fact]
         public void OutputFolderPath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
@@ -75,7 +76,7 @@ namespace Test
         [Fact]
         public void OutputFilePath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -90,7 +91,7 @@ namespace Test
         [Fact]
         public void OutputFilePath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -106,7 +107,7 @@ namespace Test
         [Fact]
         public void OutputFilePath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
@@ -124,7 +125,7 @@ namespace Test
         [Fact]
         public void ImageFolderPath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -139,7 +140,7 @@ namespace Test
         [Fact]
         public void ImageFolderPath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -155,7 +156,7 @@ namespace Test
         [Fact]
         public void ImageFolderPath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",
@@ -173,7 +174,7 @@ namespace Test
         [Fact]
         public void ImageZipPath_Is_Correct_If_Output_Is_Default()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 ExportImages = true,
@@ -188,7 +189,7 @@ namespace Test
         [Fact]
         public void ImageZipPath_Is_Correct_If_Output_Is_Custom_With_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = @"C:\Daten\Neuer_Ordner\Output.xlsx",
@@ -204,7 +205,7 @@ namespace Test
         [Fact]
         public void ImageZipPath_Is_Correct_If_Output_Is_Custom_Without_Path()
         {
-            var options = new ExportOptions
+            var options = new ExtractOptions
             {
                 Filename = @"C:\Daten\Unterordner\Datei.docx",
                 Output = "Output.xlsx",

@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WordTableExtractor.Core;
 
-namespace WordTableExtractor
+namespace WordTableExtractor.Import
 {
     [Verb("transform", HelpText = "Transform excel tables.")]
-    public class TransformOptions : IOptions
+    public class ImportOptions : IOptions
     {
         public string Filename { get; set; }
 

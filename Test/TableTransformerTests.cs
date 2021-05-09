@@ -4,25 +4,26 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using WordTableExtractor;
+using WordTableExtractor.Import;
 using Xunit;
 
 namespace Test
 {
     public class TableTransformerTests
     {
-        private TransformOptions _options = new TransformOptions
+        private ImportOptions _options = new ImportOptions
         {
-            Filename = @"D:\Temp\lh\Example\Example-imported.xlsx",
+            Filename = @"D:\Temp\lh\Example\Example-imported-numbered.xlsx",
             Sheet = "tbl",
             Range = "A1:J621",
-            Output = @"D:\Temp\lh\Example\Example-transformed.xlsx",
+            Output = @"D:\Temp\lh\Example\Example-transformed-test.xlsx",
             Consistency = true
         };
 
         [Fact]
         public void RunTransformation()
         {
-            var transformer = new TableTransformer(_options);
+            var transformer = new TableImporter(_options);
 
             transformer.Transform();
         }

@@ -2,28 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using WordTableExtractor.Extensions;
 
-namespace WordTableExtractor
+namespace WordTableExtractor.Import
 {
-    public class TableTransformer
+    public class TableImporter
     {
-        private TransformOptions _options;
-        private List<RequirementNode> _nodes;
-        private Tree<RequirementNode> _tree;
+        private ImportOptions _options;
+        private List<SpecificationItem> _nodes;
+        private Tree<SpecificationItem> _tree;
         private List<string> _importedColumnNames;
         private List<string> _log;
 
-        public TableTransformer(TransformOptions options)
+        public TableImporter(ImportOptions options)
         {
             _options = options;
         }
 
         public void Transform()
         {
-            _tree = ImportTree();
+            _tree = ImportSpecification();
 
             var table = CreateTransformedTable();
 
@@ -93,7 +95,7 @@ namespace WordTableExtractor
         //    return dataTable;
         //}
 
-        public Tree<RequirementNode> ImportTree()
+        public Tree<SpecificationItem> ImportSpecification()
         {
             var wb = new XLWorkbook(_options.Filename);
 
@@ -101,7 +103,7 @@ namespace WordTableExtractor
 
             var range = ws.Range(_options.Range);
 
-            var tree = new Tree<RequirementNode>();
+            var tree = new Tree<SpecificationItem>();
             tree.Name = ws.Name;
 
             // Column names
@@ -109,7 +111,7 @@ namespace WordTableExtractor
 
             _importedColumnNames = firstRow.Cells().Select(x => (string)x.Value).ToList();
 
-            TreeNode<RequirementNode> lastTreeNode = tree.Root;
+            TreeNode<SpecificationItem> lastTreeNode = tree.Root;
 
             // Data
             for (int i = 2; i < range.Rows().Count(); i++)
@@ -120,9 +122,9 @@ namespace WordTableExtractor
 
                     var dict = _importedColumnNames.Zip(values, (k, v) => new { k, v }).ToDictionary(x => x.k, x => (string)x.v);
 
-                    var node = new RequirementNode(dict, "Artifact Type", "fixedsection", range.Row(i).RangeAddress.ToString());
+                    var node = new SpecificationItem(dict, "Artifact Type", "fixedsection", "Contents", range.Row(i).RangeAddress.ToString());
 
-                    TreeNode<RequirementNode> currentTreeNode = null;
+                    TreeNode<SpecificationItem> currentTreeNode = null;
 
                     if(node.Level > lastTreeNode.Level)
                     {
@@ -131,10 +133,14 @@ namespace WordTableExtractor
                     else if(node.Level == lastTreeNode.Level)
                     {
                         if (node.IsHeading)
+                        {
                             currentTreeNode = lastTreeNode.Parent.AddChild(node);
+                        }    
                         else
+                        {
                             currentTreeNode = lastTreeNode;
                             lastTreeNode.AddChild(node);
+                        }  
                     }
                     else
                     {
@@ -150,6 +156,13 @@ namespace WordTableExtractor
                     Console.WriteLine(ex.Message);
                 }
             }
+
+            var dump = tree.GetDump();
+
+            Console.WriteLine(dump);
+
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(_options.Output), "Structure.txt"), dump);
+            
 
             return tree;
         }
@@ -183,7 +196,7 @@ namespace WordTableExtractor
             return table;
         }
 
-        private DataTable GetTransformedRow(TreeNode<RequirementNode> treeNode, DataTable table, List<int> id)
+        private DataTable GetTransformedRow(TreeNode<SpecificationItem> treeNode, DataTable table, List<int> id)
         {
             int number = 0;
 
@@ -438,7 +451,7 @@ namespace WordTableExtractor
             return table;
         }
 
-        private string PrintTreeNode(TreeNode<RequirementNode> node, int level = 0)
+        private string PrintTreeNode(TreeNode<SpecificationItem> node, int level = 0)
         {
             string indent = level > 0 ? " ".Repeat(level) : string.Empty;
 
@@ -446,7 +459,7 @@ namespace WordTableExtractor
 
             if(!node.IsRoot)
             {
-                sb.AppendLine($"{indent}{node.Item.Section} ({node.Level}) [{node.Chapter}]");
+                sb.AppendLine($"{indent}{node.Item.Section} ({node.Level})");
             }
                 
 
@@ -478,7 +491,7 @@ namespace WordTableExtractor
                 var rowData = table.Rows[i];
 
                 //var node = new RequirementNode(rowData.Field<string>("section"), rowData.Field<string>("Artifact Type"), rowData.Field<string>("Contents"));
-                var node = new RequirementNode(null, "Artifact Type", "fixedsection", "");
+                var node = new SpecificationItem(null, "Artifact Type", "fixedsection", "");
                 var parentNode = _nodes.Where(x => x.Address == node.Address.ParentAddress).FirstOrDefault();
 
                 if(parentNode == null)

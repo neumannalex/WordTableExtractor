@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WordTableExtractor
+namespace WordTableExtractor.Import
 {
-    public class RequirementNode
+    public class SpecificationItem
     {
         public string TypeFieldName { get; private set; }
         public string HierarchyFieldName { get; private set; }
+        public string ContentFieldName { get; private set; }
 
         public string Section { get; private set; }
         public string Hierarchy
@@ -48,7 +49,19 @@ namespace WordTableExtractor
                 }
             }
         }
-        public string Content { get; private set; }
+        public string Content
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ContentFieldName))
+                    return string.Empty;
+
+                if (!Values.ContainsKey(ContentFieldName))
+                    return string.Empty;
+
+                return Values[ContentFieldName].Trim();
+            }
+        }
         public string SourceRange { get; private set; }
         public RequirementNodeAddress Address
         {
@@ -63,40 +76,13 @@ namespace WordTableExtractor
 
         public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
 
-        //public RequirementNode(string section, string type, string content, string sourceRange = "")
-        //{
-        //    Section = section;
-        //    Content = content;
-        //    SourceRange = sourceRange;
-
-        //    //if(!string.IsNullOrEmpty(type))
-        //    //{
-        //    //    if (Enum.TryParse<ArtifactType>(type, out ArtifactType parsedType))
-        //    //    {
-        //    //        Type = parsedType;
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        if (type.ToLower().Contains("info"))
-        //    //            Type = ArtifactType.Information;
-        //    //        else
-        //    //            Type = ArtifactType.Unknown;
-        //    //    }
-        //    //}
-        //    //else
-        //    //{
-        //    //    Type = ArtifactType.Unknown;
-        //    //}
-
-        //    Address = new RequirementNodeAddress(section);
-        //}
-
-        public RequirementNode(Dictionary<string, string> fields, string typeFieldname, string hierarchyFieldName, string sourceRange = "")
+        public SpecificationItem(Dictionary<string, string> fields, string typeFieldname, string hierarchyFieldName, string contentFieldName, string sourceRange = "")
         {
             Values = fields;
 
             TypeFieldName = typeFieldname;
             HierarchyFieldName = hierarchyFieldName;
+            ContentFieldName = contentFieldName;
             SourceRange = sourceRange;
         }
 
@@ -128,13 +114,14 @@ namespace WordTableExtractor
         {
             get
             {
-                if (string.IsNullOrEmpty(Section))
-                    return string.Empty;
-
-                if (IsLeaf)
-                    return $"REQ {Address}";
+                if(IsHeading)
+                {
+                    return $"{Address} {Content}";
+                }
                 else
-                    return Content.Replace(Section, "").Trim();
+                {
+                    return $"REQ {Address}";
+                }
             }
         }
 
@@ -156,7 +143,28 @@ namespace WordTableExtractor
 
         public override string ToString()
         {
-            return Hierarchy;
+            return ToString(SpecificationStringFormat.Full);
+        }
+
+        public string ToString(SpecificationStringFormat format = SpecificationStringFormat.Short)
+        {
+            switch(format)
+            {
+                case SpecificationStringFormat.Short:
+                    return Hierarchy;
+                case SpecificationStringFormat.Full:
+                    var maxLen = 50;
+                    string content;
+
+                    if (!string.IsNullOrEmpty(Content))
+                        content = Content.Length > maxLen ? Content.Substring(0, maxLen) + "..." : Content;
+                    else
+                        content = "<empty>";
+
+                    return $"{Type} {Address} {content}";
+                default:
+                    return Hierarchy;
+            }
         }
     }
 
@@ -208,7 +216,7 @@ namespace WordTableExtractor
                     else
                     {
                         if (int.TryParse(_section, out int result))
-                            return new List<int>(result);
+                            return new List<int> { result };
                         else
                             return new List<int>();
                     }
@@ -248,7 +256,8 @@ namespace WordTableExtractor
         {
             get
             {
-                return Path.Count - 1;
+                var path = Path;
+                return path.Count;
             }
         }
 
@@ -361,5 +370,11 @@ namespace WordTableExtractor
         Information,
         Requirement,
         Unknown
+    }
+
+    public enum SpecificationStringFormat
+    {
+        Short,
+        Full
     }
 }

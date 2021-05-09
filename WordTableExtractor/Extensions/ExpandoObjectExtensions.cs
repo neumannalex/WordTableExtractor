@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Text;
 
-namespace WordTableExtractor
+namespace WordTableExtractor.Extensions
 {
     public static class ExpandoObjectExtensions
     {

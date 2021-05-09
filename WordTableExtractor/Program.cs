@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using WordTableExtractor.Extract;
+using WordTableExtractor.Import;
 
 namespace WordTableExtractor
 {
@@ -25,11 +27,11 @@ namespace WordTableExtractor
 
             try
             {
-                var parserResult = parser.ParseArguments<ExportOptions, TransformOptions>(args);
+                var parserResult = parser.ParseArguments<ExtractOptions, ImportOptions>(args);
 
                 parserResult
-                    .WithParsed<ExportOptions>(HandleExtraction)
-                    .WithParsed<TransformOptions>(HandleTransform)
+                    .WithParsed<ExtractOptions>(HandleExtraction)
+                    .WithParsed<ImportOptions>(HandleTransform)
                     .WithNotParsed(errs => DisplayHelp(errs, parserResult));
             }
             catch(Exception ex)
@@ -51,7 +53,7 @@ namespace WordTableExtractor
             Console.WriteLine(helpText);
         }
 
-        private static void HandleExtraction(ExportOptions options)
+        private static void HandleExtraction(ExtractOptions options)
         {
             var extractor = new TableExtractor(options);
             
@@ -60,9 +62,9 @@ namespace WordTableExtractor
             DisplaySummary(summary);
         }
 
-        private static void HandleTransform(TransformOptions options)
+        private static void HandleTransform(ImportOptions options)
         {
-            var transformer = new TableTransformer(options);
+            var transformer = new TableImporter(options);
 
             transformer.Transform();
         }
