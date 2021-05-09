@@ -6,6 +6,7 @@ namespace WordTableExtractor
 {
     public class Tree<T>
     {
+        public string Name { get; set; }
         public TreeNode<T> Root { get; set; }
 
         public bool HasRoot => Root != null;
@@ -41,6 +42,14 @@ namespace WordTableExtractor
             {
                 return GetChapter(this);
             }
+        }
+
+        public TreeNode<T> GetAnchestor(int level)
+        {
+            if (level == Level)
+                return this;
+            else
+                return Parent.GetAnchestor(level);
         }
 
         public TreeNode(T item, TreeNode<T> parent = null)
@@ -80,6 +89,11 @@ namespace WordTableExtractor
 
                 return GetChapter(node.Parent) + $"{separator}{myIndex}";
             }
+        }
+
+        public override string ToString()
+        {
+            return Item.ToString();
         }
     }
 }

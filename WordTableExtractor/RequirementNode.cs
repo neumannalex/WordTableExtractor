@@ -7,40 +7,97 @@ namespace WordTableExtractor
 {
     public class RequirementNode
     {
+        public string TypeFieldName { get; private set; }
+        public string HierarchyFieldName { get; private set; }
+
         public string Section { get; private set; }
-        public ArtifactType Type { get; private set; }
-        public string Content { get; private set; }
-        public string SourceRange { get; private set; }
-        public RequirementNodeAddress Address { get; private set; }
-
-        public Dictionary<string, object> Values { get; set; } = new Dictionary<string, object>();
-
-        public RequirementNode(string section, string type, string content, string sourceRange = "")
+        public string Hierarchy
         {
-            Section = section;
-            Content = content;
-            SourceRange = sourceRange;
-
-            if(!string.IsNullOrEmpty(type))
+            get
             {
-                if (Enum.TryParse<ArtifactType>(type, out ArtifactType parsedType))
+                if (string.IsNullOrEmpty(HierarchyFieldName))
+                    return string.Empty;
+
+                if (!Values.ContainsKey(HierarchyFieldName))
+                    return string.Empty;
+
+                return Values[HierarchyFieldName];
+            }
+        }
+        public ArtifactType Type
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(TypeFieldName))
+                    return ArtifactType.Unknown;
+
+                if (!Values.ContainsKey(TypeFieldName))
+                    return ArtifactType.Unknown;
+
+                var typeString = Values[TypeFieldName];
+                if (Enum.TryParse<ArtifactType>(typeString, out ArtifactType parsedType))
                 {
-                    Type = parsedType;
+                    return parsedType;
                 }
                 else
                 {
-                    if (type.ToLower().Contains("info"))
-                        Type = ArtifactType.Information;
+                    if (typeString.ToLower().Contains("info"))
+                        return ArtifactType.Information;
                     else
-                        Type = ArtifactType.Unknown;
+                        return ArtifactType.Unknown;
                 }
             }
-            else
+        }
+        public string Content { get; private set; }
+        public string SourceRange { get; private set; }
+        public RequirementNodeAddress Address
+        {
+            get
             {
-                Type = ArtifactType.Unknown;
+                if (string.IsNullOrEmpty(Hierarchy))
+                    return null;
+                else
+                    return new RequirementNodeAddress(Hierarchy);
             }
+        }
 
-            Address = new RequirementNodeAddress(section);
+        public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
+
+        //public RequirementNode(string section, string type, string content, string sourceRange = "")
+        //{
+        //    Section = section;
+        //    Content = content;
+        //    SourceRange = sourceRange;
+
+        //    //if(!string.IsNullOrEmpty(type))
+        //    //{
+        //    //    if (Enum.TryParse<ArtifactType>(type, out ArtifactType parsedType))
+        //    //    {
+        //    //        Type = parsedType;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        if (type.ToLower().Contains("info"))
+        //    //            Type = ArtifactType.Information;
+        //    //        else
+        //    //            Type = ArtifactType.Unknown;
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    Type = ArtifactType.Unknown;
+        //    //}
+
+        //    Address = new RequirementNodeAddress(section);
+        //}
+
+        public RequirementNode(Dictionary<string, string> fields, string typeFieldname, string hierarchyFieldName, string sourceRange = "")
+        {
+            Values = fields;
+
+            TypeFieldName = typeFieldname;
+            HierarchyFieldName = hierarchyFieldName;
+            SourceRange = sourceRange;
         }
 
         public bool IsHeading
@@ -95,7 +152,12 @@ namespace WordTableExtractor
             {
                 return Address.Level;
             }
-        }        
+        }
+
+        public override string ToString()
+        {
+            return Hierarchy;
+        }
     }
 
     public class RequirementNodeAddress
@@ -186,7 +248,7 @@ namespace WordTableExtractor
         {
             get
             {
-                return Path.Count;
+                return Path.Count - 1;
             }
         }
 
