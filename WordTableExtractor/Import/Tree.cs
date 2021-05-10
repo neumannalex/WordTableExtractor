@@ -89,7 +89,7 @@ namespace WordTableExtractor.Import
 
         private int GetCount(TreeNode<T> node)
         {
-            var count = IsRoot ? 0 : 1;
+            var count = Item == null ? 0 : 1;
             foreach (var child in node.Children)
             {
                 count += GetCount(child);

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using WordTableExtractor.Export;
 using WordTableExtractor.Extract;
 using WordTableExtractor.Import;
 
@@ -27,11 +28,12 @@ namespace WordTableExtractor
 
             try
             {
-                var parserResult = parser.ParseArguments<ExtractOptions, ImportOptions>(args);
+                var parserResult = parser.ParseArguments<ExtractOptions, ImportOptions, ExportOptions>(args);
 
                 parserResult
-                    .WithParsed<ExtractOptions>(HandleExtraction)
-                    .WithParsed<ImportOptions>(HandleTransform)
+                    .WithParsed<ExtractOptions>(HandleExtract)
+                    .WithParsed<ImportOptions>(HandleImport)
+                    .WithParsed<ExportOptions>(HandleExport)
                     .WithNotParsed(errs => DisplayHelp(errs, parserResult));
             }
             catch(Exception ex)
@@ -53,7 +55,7 @@ namespace WordTableExtractor
             Console.WriteLine(helpText);
         }
 
-        private static void HandleExtraction(ExtractOptions options)
+        private static void HandleExtract(ExtractOptions options)
         {
             var extractor = new TableExtractor(options);
             
@@ -62,11 +64,18 @@ namespace WordTableExtractor
             DisplaySummary(summary);
         }
 
-        private static void HandleTransform(ImportOptions options)
+        private static void HandleImport(ImportOptions options)
         {
             var transformer = new TableImporter(options);
 
             transformer.Transform();
+        }
+
+        private static void HandleExport(ExportOptions options)
+        {
+            var exporter = new TableExporter(options);
+
+            exporter.FillInboxReportTemplate();
         }
 
         private static void DisplaySummary(Summary summary)

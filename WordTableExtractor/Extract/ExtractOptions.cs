@@ -7,7 +7,7 @@ using WordTableExtractor.Core;
 
 namespace WordTableExtractor.Extract
 {
-    [Verb("export", HelpText = "Export tables from Word to Excel.")]
+    [Verb("extract", HelpText = "Extract tables from Word to Excel.")]
     public class ExtractOptions : IOptions
     {
         public string Filename { get; set; }
@@ -30,10 +30,10 @@ namespace WordTableExtractor.Extract
             {
                 return new List<Example>
                 {
-                    new Example(@"Export tables from C:\Data\Document.docx to C:\Data\Document\Document.xlsx and export images to folder C:\Data\Document\images", new ExtractOptions{ Filename = @"C:\Data\Document.docx" }),
-                    new Example(@"Export tables from C:\Data\Document.docx to C:\Data\Document\Document.xlsx and export images to archive C:\Data\Document\images.zip", new ExtractOptions{ Filename = @"C:\Data\Document.docx", ZipImages = true }),
-                    new Example(@"Export tables from C:\Data\Document.docx to C:\Other\MyFile\MyFile.xlsx and export images to folder C:\Other\MyFile\images", new ExtractOptions{ Filename = @"C:\Data\Document.docx", Output = @"C:\Other\MyFile.xlsx" }),
-                    new Example(@"Export tables from C:\Data\Document.docx to C:\Data\Document\Document.xlsx without exporting images and display verbose messages", new ExtractOptions{ Filename = @"C:\Data\Document.docx", Verbose = true, ExportImages = false }),
+                    new Example(@"Extract tables from C:\Data\Document.docx to C:\Data\Document\Document.xlsx and export images to folder C:\Data\Document\images", new ExtractOptions{ Filename = @"C:\Data\Document.docx" }),
+                    new Example(@"Extract tables from C:\Data\Document.docx to C:\Data\Document\Document.xlsx and export images to archive C:\Data\Document\images.zip", new ExtractOptions{ Filename = @"C:\Data\Document.docx", ZipImages = true }),
+                    new Example(@"Extract tables from C:\Data\Document.docx to C:\Other\MyFile\MyFile.xlsx and export images to folder C:\Other\MyFile\images", new ExtractOptions{ Filename = @"C:\Data\Document.docx", Output = @"C:\Other\MyFile.xlsx" }),
+                    new Example(@"Extract tables from C:\Data\Document.docx to C:\Data\Document\Document.xlsx without exporting images and display verbose messages", new ExtractOptions{ Filename = @"C:\Data\Document.docx", Verbose = true, ExportImages = false }),
                 };
             }
         }

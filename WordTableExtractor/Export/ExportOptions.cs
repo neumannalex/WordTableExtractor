@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using WordTableExtractor.Core;
 
-namespace WordTableExtractor.Import
+namespace WordTableExtractor.Export
 {
-    [Verb("import", HelpText = "Transform excel tables.")]
-    public class ImportOptions : IOptions
+    [Verb("export", HelpText = "Exports excel tables into a template.")]
+    public class ExportOptions : IOptions
     {
         public string Filename { get; set; }
 
@@ -19,7 +19,7 @@ namespace WordTableExtractor.Import
         [Option('r', "range", Required = true, HelpText = "Data range in input file (e. g. A2:C10).")]
         public string Range { get; set; }
 
-        [Option('c', "consistency", Required = false, HelpText = "Only checks consistency of input hierarchy.")]
-        public bool Consistency { get; set; }
+        [Option('t', "template", Required = true, HelpText = "Worksheet that acts as a template.")]
+        public string Template { get; set; }
     }
 }

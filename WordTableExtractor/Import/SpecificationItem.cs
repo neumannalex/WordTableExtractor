@@ -125,6 +125,21 @@ namespace WordTableExtractor.Import
             }
         }
 
+        public string Summary
+        {
+            get
+            {
+                if (IsHeading)
+                {
+                    return Content;
+                }
+                else
+                {
+                    return $"REQ {Address}";
+                }
+            }
+        }
+
         public bool IsLeaf
         {
             get

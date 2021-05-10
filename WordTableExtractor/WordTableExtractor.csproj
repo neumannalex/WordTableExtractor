@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="33.0.2" />
     <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="ClosedXML.Report" Version="0.2.1" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="ConsoleTables" Version="2.4.2" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.3" />

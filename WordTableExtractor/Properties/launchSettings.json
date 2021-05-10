@@ -2,7 +2,7 @@
   "profiles": {
     "WordTableExtractor": {
       "commandName": "Project",
-      "commandLineArgs": "transform -f D:\\Temp\\lh\\Example\\Example-imported-numbered.xlsx -s tbl -r A1:J621 -o D:\\Temp\\lh\\Example\\Example-transformed-test.xlsx"
+      "commandLineArgs": "export -f C:\\Daten\\Temp\\LH_Word2Excel\\20210507_WORD-Final_NICHT-MEHR-AENDERN_HWComponentSpecification_V1.2\\Example-imported-numbered.xlsx -s tbl -r A1:J621 -o C:\\Daten\\Temp\\LH_Word2Excel\\20210507_WORD-Final_NICHT-MEHR-AENDERN_HWComponentSpecification_V1.2\\Example-imported-numbered-exported-for-Inbox.xlsx -t C:\\Daten\\Temp\\LH_Word2Excel\\Templates\\Template-Inbox2.xlsx"
     }
   }
 }

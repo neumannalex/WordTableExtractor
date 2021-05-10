@@ -27,6 +27,13 @@ namespace WordTableExtractor.Import
         {
             _tree = ImportSpecification();
 
+            var dump = _tree.GetDump();
+
+            Console.WriteLine(dump);
+
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(_options.Output), "Structure.txt"), dump);
+
+
             var table = CreateTransformedTable();
 
             //var importedData = ImportData();
@@ -40,60 +47,6 @@ namespace WordTableExtractor.Import
 
             //ExportData(processedData);
         }
-
-        //public DataTable ImportData()
-        //{
-        //    var wb = new XLWorkbook(_options.Filename);
-
-        //    var ws = wb.Worksheet(_options.Sheet);
-
-        //    var range = ws.Range(_options.Range);
-
-        //    var dataTable = new DataTable();
-        //    dataTable.TableName = ws.Name;
-
-        //    // Column names
-        //    var firstRow = range.Row(1);
-
-        //    var columnNames = firstRow.Cells().Select(x => (string)x.Value).ToList();
-            
-        //    foreach(var name in columnNames)
-        //        dataTable.Columns.Add(name);
-
-        //    dataTable.Columns.Add("originalsection");
-        //    dataTable.Columns.Add("sourcerange");
-
-        //    // Data
-        //    for (int i = 2; i < range.Rows().Count(); i++)
-        //    {
-        //        var values = range.Row(i).Cells().Select(x => x.Value).ToArray();
-        //        var row = dataTable.NewRow();
-        //        row.ItemArray = values;
-                
-        //        // Workaround für falsche Section
-        //        // Es gibt viele Einträge, deren Section a.b.0-x anstelle von a.b-x lautet
-        //        // Fälle, wo anstelle der 0 eine andere Ziffer steht kommen nicht vor
-        //        // Maßnahme: ersetze .0-x durch -x
-        //        var originalSection = row.Field<string>("section");
-        //        var correctedSection = Regex.Replace(originalSection, @"\.0-(\d+)$", "-$1");
-
-        //        row["sourcerange"] = range.Row(i).RangeAddress.ToString();
-        //        row["originalsection"] = originalSection;
-        //        row["section"] = correctedSection;
-
-        //        dataTable.Rows.Add(row);
-
-        //        var node = new RequirementNode(originalSection,
-        //            row.Field<string>("Artifact Type"),
-        //            row.Field<string>("Contents"),
-        //            range.Row(i).RangeAddress.ToString()
-        //            );
-
-        //        node.Values = columnNames.Zip(values, (k, v) => new { k, v }).ToDictionary(x => x.k, x => (string)x.v);
-        //    }
-
-        //    return dataTable;
-        //}
 
         public Tree<SpecificationItem> ImportSpecification()
         {
@@ -156,13 +109,6 @@ namespace WordTableExtractor.Import
                     Console.WriteLine(ex.Message);
                 }
             }
-
-            var dump = tree.GetDump();
-
-            Console.WriteLine(dump);
-
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(_options.Output), "Structure.txt"), dump);
-            
 
             return tree;
         }
@@ -292,20 +238,6 @@ namespace WordTableExtractor.Import
 
             return table;
         }
-
-        //public void BuildNodes(DataTable table)
-        //{
-        //    _nodes = new List<RequirementNode>();
-
-        //    // Read all nodes
-        //    for (int i = 0; i < table.Rows.Count; i++)
-        //    {
-        //        var rowData = table.Rows[i];
-
-        //        var node = new RequirementNode(rowData.Field<string>("section"), rowData.Field<string>("Artifact Type"), rowData.Field<string>("Contents"), rowData.Field<string>("sourcerange"));
-        //        _nodes.Add(node);
-        //    }
-        //}
 
         public void CheckConsistency()
         {
