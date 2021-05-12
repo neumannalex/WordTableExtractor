@@ -1,7 +1,7 @@
 using FluentAssertions;
 using System;
 using WordTableExtractor;
-using WordTableExtractor.Extract;
+using WordTableExtractor.Features.Extract;
 using Xunit;
 
 namespace Test
@@ -10,7 +10,7 @@ namespace Test
     {
         private ExtractOptions _options = new ExtractOptions
         {
-            Filename = @"D:\Temp\lh\Example.docx",
+            Filename = "",
             ExportImages = true,
             ZipImages = true,
             Verbose = false

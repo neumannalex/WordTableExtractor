@@ -12,14 +12,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WordTableExtractor.Extensions;
 
-namespace WordTableExtractor.Extract
+namespace WordTableExtractor.Features.Extract
 {
     public class TableExtractor
     {
         private readonly ExtractOptions _options;
         private List<DataTable> _dataTables;
         private WordprocessingDocument _document;
-        private Summary _summary;
+        private ExtractSummary _summary;
 
         public string OutputFolderPath
         {
@@ -59,7 +59,7 @@ namespace WordTableExtractor.Extract
         public TableExtractor(ExtractOptions options)
         {
             _options = options;
-            _summary = new Summary();
+            _summary = new ExtractSummary();
 
             // Default for output filename and directory
             if (string.IsNullOrEmpty(_options.Output))
@@ -70,7 +70,7 @@ namespace WordTableExtractor.Extract
         }
 
 
-        public Summary ExtractTables()
+        public ExtractSummary ExtractTables()
         {
             InformationMessage("Starting to export tables from Word document.");
 

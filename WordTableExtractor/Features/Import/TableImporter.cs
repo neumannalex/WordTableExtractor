@@ -6,9 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using WordTableExtractor.Core;
 using WordTableExtractor.Extensions;
 
-namespace WordTableExtractor.Import
+namespace WordTableExtractor.Features.Import
 {
     public class TableImporter
     {
@@ -23,7 +24,7 @@ namespace WordTableExtractor.Import
             _options = options;
         }
 
-        public void Transform()
+        public void AnalyzeStructure()
         {
             _tree = ImportSpecification();
 
@@ -31,10 +32,20 @@ namespace WordTableExtractor.Import
 
             Console.WriteLine(dump);
 
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(_options.Output), "Structure.txt"), dump);
+            var outputPath = _options.Output;
 
+            if(string.IsNullOrEmpty(outputPath))
+            {
+                var filename = Path.GetFileNameWithoutExtension(_options.Filename);
+                outputPath = Path.Combine(Path.GetDirectoryName(_options.Filename), $"{filename}-structure.txt");
+            }
+            
+            File.WriteAllText(outputPath, dump);
+        }
 
-            var table = CreateTransformedTable();
+        private void Transform()
+        {
+            //var table = CreateTransformedTable();
 
             //var importedData = ImportData();
 
@@ -47,6 +58,41 @@ namespace WordTableExtractor.Import
 
             //ExportData(processedData);
         }
+
+        //public void SanitizeNumbering()
+        //{
+        //    _tree = ImportSpecification();
+        //    var nodes = _tree.ToList();
+
+        //    var wb = new XLWorkbook(_options.Filename);
+
+        //    var ws = wb.Worksheet(_options.Sheet);
+
+        //    var range = ws.Range(_options.Range);
+
+        //    var numberingColumnName = "section";
+
+        //    // Column names
+        //    var firstRow = range.Row(1);
+
+        //    var columnNames = firstRow.Cells().Select(x => (string)x.Value).ToList();
+
+        //    if(!columnNames.Contains(numberingColumnName))
+        //    {
+        //        Console.WriteLine($"No column named '{numberingColumnName}' found. Can not sanitize numbering.");
+        //        return;
+        //    }
+
+        //    var numberingColumnIndex = columnNames.IndexOf(numberingColumnName) + 1;
+
+        //    var firstDataRow = 2;
+        //    for(int i = 0; i < nodes.Count; i++)
+        //    {
+        //        range.Cell(firstDataRow + i, numberingColumnIndex).SetValue<string>(nodes[i].Item.Address.ToString());
+        //    }
+
+        //    wb.SaveAs(_options.Output);
+        //}
 
         public Tree<SpecificationItem> ImportSpecification()
         {
@@ -75,7 +121,7 @@ namespace WordTableExtractor.Import
 
                     var dict = _importedColumnNames.Zip(values, (k, v) => new { k, v }).ToDictionary(x => x.k, x => (string)x.v);
 
-                    var node = new SpecificationItem(dict, "Artifact Type", "fixedsection", "Contents", range.Row(i).RangeAddress.ToString());
+                    var node = new SpecificationItem(dict, "Artifact Type", "section", "Contents", range.Row(i).RangeAddress.ToString());
 
                     TreeNode<SpecificationItem> currentTreeNode = null;
 
@@ -423,7 +469,7 @@ namespace WordTableExtractor.Import
                 var rowData = table.Rows[i];
 
                 //var node = new RequirementNode(rowData.Field<string>("section"), rowData.Field<string>("Artifact Type"), rowData.Field<string>("Contents"));
-                var node = new SpecificationItem(null, "Artifact Type", "fixedsection", "");
+                var node = new SpecificationItem(null, "Artifact Type", "section", "");
                 var parentNode = _nodes.Where(x => x.Address == node.Address.ParentAddress).FirstOrDefault();
 
                 if(parentNode == null)

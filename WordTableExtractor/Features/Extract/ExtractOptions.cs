@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using WordTableExtractor.Core;
 
-namespace WordTableExtractor.Extract
+namespace WordTableExtractor.Features.Extract
 {
     [Verb("extract", HelpText = "Extract tables from Word to Excel.")]
     public class ExtractOptions : IOptions

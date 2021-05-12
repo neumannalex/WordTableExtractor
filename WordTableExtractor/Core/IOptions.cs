@@ -8,7 +8,8 @@ namespace WordTableExtractor.Core
 {
     public interface IOptions
     {
-        [Option('f', "filename", Required = true, HelpText = "Input filename.")]
+        //[Option('f', "filename", Required = true, HelpText = "Input filename.")]
+        [Value(0, HelpText = "Input filename.")]
         public string Filename { get; set; }
 
         [Option('o', "output", Required = false, HelpText = "Output filename.")]

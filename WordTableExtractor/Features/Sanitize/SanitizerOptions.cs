@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using WordTableExtractor.Core;
 
-namespace WordTableExtractor.Export
+namespace WordTableExtractor.Features.Sanitize
 {
-    [Verb("export", HelpText = "Exports excel tables into a template.")]
-    public class ExportOptions : IOptions
+    [Verb("sanitize", HelpText = "Sanitizes the numbering of hierachial rows in an Excel sheet.")]
+    public class SanitizerOptions : IOptions
     {
         public string Filename { get; set; }
 
@@ -19,7 +19,7 @@ namespace WordTableExtractor.Export
         [Option('r', "range", Required = true, HelpText = "Data range in input file (e. g. A2:C10).")]
         public string Range { get; set; }
 
-        [Option('t', "template", Required = true, HelpText = "Worksheet that acts as a template.")]
-        public string Template { get; set; }
+        [Option('c', "column", Required = true, HelpText = "Name of the column header that contains the numbering (e. g. 'section').")]
+        public string Column { get; set; }
     }
 }

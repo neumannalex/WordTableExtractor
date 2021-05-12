@@ -6,9 +6,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using WordTableExtractor.Export;
-using WordTableExtractor.Extract;
-using WordTableExtractor.Import;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using WordTableExtractor.Features.Export;
+using WordTableExtractor.Features.Extract;
+using WordTableExtractor.Features.Import;
+using WordTableExtractor.Features.Sanitize;
+using WordTableExtractor.Features.Structure;
 
 namespace WordTableExtractor
 {
@@ -28,12 +32,15 @@ namespace WordTableExtractor
 
             try
             {
-                var parserResult = parser.ParseArguments<ExtractOptions, ImportOptions, ExportOptions>(args);
+                var parserResult = parser.ParseArguments<ExtractOptions, ExportOptions, SanitizerOptions, StructureOptions, TestOptions>(args);
 
                 parserResult
                     .WithParsed<ExtractOptions>(HandleExtract)
-                    .WithParsed<ImportOptions>(HandleImport)
+                    //.WithParsed<ImportOptions>(HandleImport)
                     .WithParsed<ExportOptions>(HandleExport)
+                    .WithParsed<SanitizerOptions>(HandleSanitize)
+                    .WithParsed<StructureOptions>(HandleStructure)
+                    .WithParsed<TestOptions>(HandleTest)
                     .WithNotParsed(errs => DisplayHelp(errs, parserResult));
             }
             catch(Exception ex)
@@ -64,12 +71,12 @@ namespace WordTableExtractor
             DisplaySummary(summary);
         }
 
-        private static void HandleImport(ImportOptions options)
-        {
-            var transformer = new TableImporter(options);
+        //private static void HandleImport(ImportOptions options)
+        //{
+        //    var transformer = new TableImporter(options);
 
-            transformer.Transform();
-        }
+        //    transformer.Transform();
+        //}
 
         private static void HandleExport(ExportOptions options)
         {
@@ -78,7 +85,37 @@ namespace WordTableExtractor
             exporter.FillInboxReportTemplate();
         }
 
-        private static void DisplaySummary(Summary summary)
+        private static void HandleSanitize(SanitizerOptions options)
+        {
+            var sanitizer = new Sanitizer(options);
+
+            sanitizer.SanitizeNumbering();
+        }
+
+        private static void HandleStructure(StructureOptions options)
+        {
+            var importOptions = new ImportOptions
+            {
+                Filename = options.Filename,
+                Output = options.Output,
+                Sheet = options.Sheet,
+                Range = options.Range
+            };
+
+            var importer = new TableImporter(importOptions);
+
+            importer.AnalyzeStructure();
+        }
+
+        private static void HandleTest(TestOptions options)
+        {
+            var json = JsonSerializer.Serialize(options, new JsonSerializerOptions { WriteIndented = true });
+
+            Console.WriteLine("Parsed Options:");
+            Console.WriteLine(json);
+        }
+
+        private static void DisplaySummary(ExtractSummary summary)
         {
             Console.WriteLine();
             Console.WriteLine("SUMMARY");

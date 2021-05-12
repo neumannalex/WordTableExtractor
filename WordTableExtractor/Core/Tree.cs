@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace WordTableExtractor.Import
+namespace WordTableExtractor.Core
 {
-    public class Tree<T>
+    public interface ITreeNode
+    {
+        public bool IsHeading { get; }
+    }
+
+    public class Tree<T> where T: ITreeNode
     {
         public string Name { get; set; }
         public TreeNode<T> Root { get; set; }
@@ -25,10 +31,36 @@ namespace WordTableExtractor.Import
 
             return sb.ToString();
         }
+
+        public List<TreeNode<T>> ToList()
+        {
+            var nodes = GetTreeNodes(Root);
+
+            return nodes;
+        }
+
+        private List<TreeNode<T>> GetTreeNodes<T>(TreeNode<T> treeNode) where T: ITreeNode
+        {
+            var nodes = new List<TreeNode<T>>();
+
+            if (treeNode.Item != null)
+                nodes.Add(treeNode);
+
+
+            foreach (var child in treeNode.Children)
+            {
+                var childNodes = GetTreeNodes(child);
+
+                if (childNodes.Count > 0)
+                    nodes.AddRange(childNodes);
+            }
+
+            return nodes;
+        }
     }
 
 
-    public class TreeNode<T>
+    public class TreeNode<T> where T: ITreeNode
     {
         public TreeNode<T> Parent { get; set; }
 
@@ -125,7 +157,7 @@ namespace WordTableExtractor.Import
             }
 
             if (Item != null)
-                sb.AppendLine(Item.ToString());
+                sb.AppendLine($"[{Numbering}] " + Item.ToString());
             else
             {
                 if (IsRoot)
@@ -149,6 +181,41 @@ namespace WordTableExtractor.Import
             var dump = GetDump(indent);
 
             Console.WriteLine(dump);
+        }
+
+        public string Numbering
+        {
+            get
+            {
+                if (IsRoot)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    var parentNumbering = Parent.Numbering;
+
+                    if (parentNumbering.Contains("-"))
+                        return "ERROR - A parent must not contain a dash.";
+
+                    var ids = parentNumbering.Contains(".") ? 
+                        parentNumbering.Split(".").Select(x => Convert.ToInt32(x)).ToList() :
+                        string.IsNullOrEmpty(parentNumbering) ? new List<int>() : new List<int> { Convert.ToInt32(parentNumbering) };
+
+                    if (Item.IsHeading)
+                    {
+                        var myIndex = Parent.Children.Where(x => x.Item.IsHeading).ToList().IndexOf(this) + 1;
+                        ids.Add(myIndex);
+
+                        return string.Join('.', ids);
+                    }
+                    else
+                    {
+                        var myIndex = Parent.Children.Where(x => !x.Item.IsHeading).ToList().IndexOf(this) + 1;
+                        return string.Join('.', ids) + $"-{myIndex}";
+                    }                    
+                }
+            }
         }
     }
 }

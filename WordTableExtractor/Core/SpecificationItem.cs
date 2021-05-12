@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WordTableExtractor.Import
+namespace WordTableExtractor.Core
 {
-    public class SpecificationItem
+    public class SpecificationItem : ITreeNode
     {
         public string TypeFieldName { get; private set; }
         public string HierarchyFieldName { get; private set; }

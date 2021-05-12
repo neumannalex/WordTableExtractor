@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WordTableExtractor.Import;
+using WordTableExtractor.Core;
+using WordTableExtractor.Features.Import;
 
-namespace WordTableExtractor.Export
+namespace WordTableExtractor.Features.Export
 {
     public class TableExporter
     {
@@ -158,14 +159,14 @@ namespace WordTableExtractor.Export
             Console.WriteLine($"Saved the filled template to '{_options.Output}'.");
         }
 
-        private List<TreeNode<T>> GetFlatTree<T>(Tree<T> tree)
+        private List<TreeNode<T>> GetFlatTree<T>(Tree<T> tree) where T: ITreeNode
         {
             var nodes = GetTreeNodes(tree.Root);
 
             return nodes;
         }
 
-        private List<TreeNode<T>> GetTreeNodes<T>(TreeNode<T> treeNode)
+        private List<TreeNode<T>> GetTreeNodes<T>(TreeNode<T> treeNode) where T: ITreeNode
         {
             var nodes = new List<TreeNode<T>>();
             

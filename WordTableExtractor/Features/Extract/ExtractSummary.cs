@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WordTableExtractor.Extract
+namespace WordTableExtractor.Features.Extract
 {
-    public class Summary
+    public class ExtractSummary
     {
         public bool CouldReadWordDocument { get; set; }
         public string InputFilePath { get; set; }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
 using WordTableExtractor;
-using WordTableExtractor.Import;
+using WordTableExtractor.Features.Import;
 using Xunit;
 
 namespace Test
@@ -13,20 +13,12 @@ namespace Test
     {
         private ImportOptions _options = new ImportOptions
         {
-            Filename = @"D:\Temp\lh\Example\Example-imported-numbered.xlsx",
+            Filename = "",
             Sheet = "tbl",
             Range = "A1:J621",
-            Output = @"D:\Temp\lh\Example\Example-transformed-test.xlsx",
-            Consistency = true
+            Output = "",
+            Consistency = false
         };
-
-        [Fact]
-        public void RunTransformation()
-        {
-            var transformer = new TableImporter(_options);
-
-            transformer.Transform();
-        }
 
         [Fact]
         public void TestRegex()
@@ -39,15 +31,5 @@ namespace Test
             var replaced = Regex.Replace(input, pattern, "-$1");
         }
 
-        [Fact]
-        public void TestTree()
-        {
-            //var req0 = new RequirementNode("1.15", "Root", "");
-
-            //var rootNode = new TreeNode<RequirementNode>(req0);
-
-            
-
-        }
     }
 }
