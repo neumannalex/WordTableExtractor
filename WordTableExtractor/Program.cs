@@ -13,6 +13,7 @@ using WordTableExtractor.Features.Extract;
 using WordTableExtractor.Features.Import;
 using WordTableExtractor.Features.Sanitize;
 using WordTableExtractor.Features.Structure;
+using WordTableExtractor.Services;
 
 namespace WordTableExtractor
 {
@@ -94,17 +95,8 @@ namespace WordTableExtractor
 
         private static void HandleStructure(StructureOptions options)
         {
-            var importOptions = new ImportOptions
-            {
-                Filename = options.Filename,
-                Output = options.Output,
-                Sheet = options.Sheet,
-                Range = options.Range
-            };
-
-            var importer = new TableImporter(importOptions);
-
-            importer.AnalyzeStructure();
+            var structure = new StructureAnalyzer(options);
+            structure.ViusalizeStructure();
         }
 
         private static void HandleTest(TestOptions options)

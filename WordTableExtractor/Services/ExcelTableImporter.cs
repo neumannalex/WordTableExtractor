@@ -40,11 +40,8 @@ namespace WordTableExtractor.Services
             return dataTable;
         }
 
-        public NeumannAlex.Tree.Tree<Dictionary<string, string>> ImportAsTree(string filename, string sheet, string dataRange, string hierarchyFieldname, bool hasHeader)
+        public NeumannAlex.Tree.Tree<Dictionary<string, string>> ImportAsTree(string filename, string sheet, string dataRange, string hierarchyColumn, string typeColumn, string directoryType, bool hasHeader)
         {
-            var itemTypeFieldName = "Artifact Type";
-            var itemTypeFolderValue = "Heading";
-
             var wb = new XLWorkbook(filename);
 
             var ws = wb.Worksheet(sheet);
@@ -69,13 +66,13 @@ namespace WordTableExtractor.Services
 
                 var node = new SectionizedTreeNode<Dictionary<string, string>>(dict)
                 {
-                    Type = dict[itemTypeFieldName] == itemTypeFolderValue ? SectionizedTreeNodeType.Folder : SectionizedTreeNodeType.Leaf
+                    Type = dict[typeColumn] == directoryType ? SectionizedTreeNodeType.Folder : SectionizedTreeNodeType.Leaf
                 };
 
 
-                if(!string.IsNullOrEmpty(hierarchyFieldname) && columnNames.Contains(hierarchyFieldname))
+                if(!string.IsNullOrEmpty(hierarchyColumn) && columnNames.Contains(hierarchyColumn))
                 {
-                    var hierarchy = dict[hierarchyFieldname];
+                    var hierarchy = dict[hierarchyColumn];
                     var depth = CalculateDepthFromHierarchy(hierarchy);
 
                     if(depth > lastDepth)
